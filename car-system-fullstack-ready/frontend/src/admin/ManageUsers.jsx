@@ -1,0 +1,5 @@
+import { useEffect,useState } from "react";
+import { Trash2 } from "lucide-react";
+import { getUsers,deleteUser } from "../services/userService";
+export default function ManageUsers(){const [users,setUsers]=useState([]);const load=()=>getUsers().then(setUsers);useEffect(()=>{load()},[]);const remove=async id=>{if(confirm("Delete this user?")){await deleteUser(id);load()}};
+return <section className="section admin-page"><div className="page-title"><span className="section-kicker">ADMIN / CUSTOMERS</span><h1>Manage users.</h1></div><div className="table-card"><table><thead><tr><th>User</th><th>Email</th><th>Role</th><th>Joined</th><th></th></tr></thead><tbody>{users.map(u=><tr key={u.id}><td><b>{u.name}</b></td><td>{u.email}</td><td><span className="role-chip">{u.role}</span></td><td>{u.createdAt?new Date(u.createdAt).toLocaleDateString():"—"}</td><td>{u.role!=="ADMIN"&&<button className="danger-btn" onClick={()=>remove(u.id)}><Trash2 size={16}/></button>}</td></tr>)}</tbody></table></div></section>}

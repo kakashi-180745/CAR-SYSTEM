@@ -1,0 +1,41 @@
+package com.example.carecommerce.controller;
+
+import com.example.carecommerce.model.User;
+import com.example.carecommerce.service.UserService;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import java.io.IOException;
+import java.nio.file.*;
+import java.security.Principal;
+import java.util.UUID;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+
+@RestController @RequestMapping("/api/profile")
+public class ProfileController {
+    private final UserService users; private final Path uploadDir;
+    public ProfileController(UserService users,@Value("${app.upload-dir:uploads/profiles}") String dir){this.users=users;this.uploadDir=Paths.get(dir);}
+    @PostMapping(value="/image",consumes=MediaType.MULTIPART_FORM_DATA_VALUE)
+    public User upload(@RequestParam("file") MultipartFile file,Principal principal)throws IOException{
+        if(file.isEmpty())throw new IllegalArgumentException("Please choose an image.");
+        if(file.getSize()>5*1024*1024)throw new IllegalArgumentException("Profile image must be 5MB or smaller.");
+        BufferedImage image;
+        try (var input = file.getInputStream()) {
+            image = ImageIO.read(input);
+        }
+        if(image == null)throw new IllegalArgumentException("The uploaded file is not a valid image.");
+        if(image.getWidth() > 6000 || image.getHeight() > 6000)
+            throw new IllegalArgumentException("Profile image dimensions are too large.");
+        Path base = uploadDir.toAbsolutePath().normalize();
+        Files.createDirectories(base);
+        String name=UUID.randomUUID()+".jpg";
+        Path target=base.resolve(name).normalize();
+        if(!base.equals(target.getParent()))
+            throw new IllegalArgumentException("Invalid upload path.");
+        if(!ImageIO.write(image, "jpg", target.toFile()))
+            throw new IllegalArgumentException("Could not process the profile image.");
+        User u=users.getSelf(principal.getName()); u.setProfileImage("/uploads/profiles/"+name); return users.save(u);
+    }
+}

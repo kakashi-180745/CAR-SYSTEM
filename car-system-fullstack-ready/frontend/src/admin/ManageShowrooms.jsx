@@ -1,0 +1,8 @@
+import { useEffect,useState } from "react";
+import { Plus, Trash2 } from "lucide-react";
+import { Link } from "react-router-dom";
+import { getShowrooms,createShowroom,deleteShowroom } from "../services/showroomService";
+const blank={name:"",address:"",city:"Chennai",latitude:"",longitude:"",phone:"",email:""};
+export default function ManageShowrooms(){const [items,setItems]=useState([]);const [f,setF]=useState(blank);const load=()=>getShowrooms().then(setItems);useEffect(()=>{load()},[]);
+const submit=async e=>{e.preventDefault();await createShowroom({...f,latitude:Number(f.latitude),longitude:Number(f.longitude)});setF(blank);load()};const remove=async id=>{if(confirm("Delete showroom?")){await deleteShowroom(id);load()}};
+return <section className="section admin-page"><div className="page-title"><span className="section-kicker">ADMIN / LOCATIONS</span><h1>Showroom network.</h1></div><div className="two-col-admin"><form className="admin-form compact" onSubmit={submit}><h3>Add showroom</h3>{Object.keys(blank).map(n=><label key={n}>{n}<input required name={n} value={f[n]} onChange={e=>setF({...f,[n]:e.target.value})}/></label>)}<button className="btn btn-dark"><Plus size={16}/> Add location</button></form><div className="table-card"><table><thead><tr><th>Showroom</th><th>City</th><th>Coordinates</th><th></th></tr></thead><tbody>{items.map(s=><tr key={s.id}><td><b>{s.name}</b><small>{s.address}</small></td><td>{s.city}</td><td>{s.latitude}, {s.longitude}</td><td><div style={{display:"flex",gap:8}}><Link className="btn btn-outline" to={`/admin/showrooms/${s.id}/edit`}>Edit</Link><button className="danger-btn" onClick={()=>remove(s.id)}><Trash2 size={16}/></button></div></td></tr>)}</tbody></table></div></div></section>}

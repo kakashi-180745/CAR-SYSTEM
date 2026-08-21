@@ -1,0 +1,2 @@
+import { Link } from "react-router-dom";
+export default function Footer(){return <footer><div className="footer-inner"><div><div className="brand footer-brand"><span className="brand-mark">C</span><span>CAR<span>SYSTEM</span></span></div><p>Find your next car with confidence.</p></div><div className="footer-links"><Link to="/cars">Browse Cars</Link><Link to="/showrooms">Showrooms</Link><Link to="/login">Sign in</Link></div></div><div className="footer-bottom">© 2026 Car System. Built for a modern car buying experience.</div></footer>}
