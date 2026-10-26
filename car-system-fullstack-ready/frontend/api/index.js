@@ -2,14 +2,15 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import crypto from "node:crypto";
-import { createRequire } from "node:module";
+import { fileURLToPath } from "node:url";
 import express from "express";
 import cors from "cors";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import multer from "multer";
 
-const require = createRequire(import.meta.url);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const rawJwtSecret = process.env.JWT_SECRET || "car-system-vercel-jwt-secret-key-2026-secure-hmac256";
 const JWT_SECRET =
@@ -19,12 +20,38 @@ const JWT_SECRET =
 const JWT_EXP_MS = Number(process.env.JWT_EXPIRATION_MS || 86400000);
 const ADMIN_SIGNUP_CODE = (process.env.ADMIN_SIGNUP_CODE || "CAR-ADMIN-2026").trim();
 
+const LOCAL_SEED_PATH = path.join(__dirname, "_seed.json");
+const TMP_SEED_PATH = path.join(os.tmpdir(), "car_system_seed_v1.json");
+const REMOTE_SEED_URL =
+  "https://raw.githubusercontent.com/kakashi-180745/CAR-SYSTEM/arena/a2964455-car-system/car-system-fullstack-ready/frontend/api/_seed.json";
 const STATE_PATH = path.join(os.tmpdir(), "car_system_vercel_state_v1.json");
 
 let cachedSeed = null;
+async function ensureSeed() {
+  if (cachedSeed) return cachedSeed;
+  if (fs.existsSync(LOCAL_SEED_PATH)) {
+    cachedSeed = JSON.parse(fs.readFileSync(LOCAL_SEED_PATH, "utf8"));
+    return cachedSeed;
+  }
+  if (fs.existsSync(TMP_SEED_PATH)) {
+    cachedSeed = JSON.parse(fs.readFileSync(TMP_SEED_PATH, "utf8"));
+    return cachedSeed;
+  }
+  const resp = await fetch(REMOTE_SEED_URL);
+  if (!resp.ok) throw new Error(`Failed to fetch seed catalog: ${resp.status}`);
+  const text = await resp.text();
+  try {
+    fs.writeFileSync(TMP_SEED_PATH, text);
+  } catch {
+    // ignore tmp write errors
+  }
+  cachedSeed = JSON.parse(text);
+  return cachedSeed;
+}
+
 function getSeed() {
   if (!cachedSeed) {
-    cachedSeed = require("./_seed.json");
+    cachedSeed = JSON.parse(fs.readFileSync(LOCAL_SEED_PATH, "utf8"));
   }
   return cachedSeed;
 }
@@ -265,11 +292,16 @@ const upload = multer({
 const app = express();
 app.use(cors({ origin: true, credentials: true }));
 app.use(express.json({ limit: "2mb" }));
-app.use((req, _res, next) => {
+app.use(async (req, res, next) => {
   if (!req.url.startsWith("/api/") && req.url !== "/api") {
     req.url = `/api${req.url.startsWith("/") ? "" : "/"}${req.url}`;
   }
-  next();
+  try {
+    await ensureSeed();
+    next();
+  } catch (err) {
+    res.status(500).json({ message: err?.message || "Failed to initialize catalog" });
+  }
 });
 
 // Health
