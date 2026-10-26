@@ -4,10 +4,10 @@
 DROP DATABASE IF EXISTS car_ecommerce;
 CREATE DATABASE car_ecommerce CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE car_ecommerce;
-CREATE TABLE users (id BIGINT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(100) NOT NULL, email VARCHAR(160) NOT NULL UNIQUE, password VARCHAR(255) NOT NULL, role VARCHAR(20) NOT NULL DEFAULT 'USER', phone VARCHAR(20), created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP);
+CREATE TABLE users (id BIGINT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(100) NOT NULL, email VARCHAR(160) NOT NULL UNIQUE, password VARCHAR(255) NOT NULL, role VARCHAR(20) NOT NULL DEFAULT 'USER', phone VARCHAR(20), profile_image VARCHAR(1000), created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP);
 CREATE TABLE cars (id BIGINT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(150), brand VARCHAR(80) NOT NULL, model VARCHAR(100) NOT NULL, price DECIMAL(14,2) NOT NULL, year INT, fuel_type VARCHAR(30), transmission VARCHAR(30), body_type VARCHAR(40), mileage DOUBLE, description VARCHAR(2000), image_url VARCHAR(1000), market_country VARCHAR(100), currency VARCHAR(10), market_price DECIMAL(16,2), available BOOLEAN NOT NULL DEFAULT TRUE, created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP);
 CREATE TABLE car_images (id BIGINT PRIMARY KEY AUTO_INCREMENT, car_id BIGINT NOT NULL, image_url VARCHAR(1000) NOT NULL);
-CREATE TABLE showrooms (id BIGINT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(255) NOT NULL, address VARCHAR(300) NOT NULL, city VARCHAR(80) NOT NULL, country VARCHAR(100), latitude DOUBLE NOT NULL, longitude DOUBLE NOT NULL, phone VARCHAR(30), email VARCHAR(160));
+CREATE TABLE showrooms (id BIGINT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(255) NOT NULL, brand VARCHAR(120), city VARCHAR(80) NOT NULL, state VARCHAR(100), country VARCHAR(100), address VARCHAR(300) NOT NULL, phone VARCHAR(30), email VARCHAR(160), website VARCHAR(300), image_url VARCHAR(1000), latitude DOUBLE NOT NULL, longitude DOUBLE NOT NULL);
 CREATE TABLE wishlist (id BIGINT PRIMARY KEY AUTO_INCREMENT, user_id BIGINT NOT NULL, car_id BIGINT NOT NULL, created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, UNIQUE KEY uq_wishlist_user_car (user_id, car_id));
 CREATE TABLE cart_items (id BIGINT PRIMARY KEY AUTO_INCREMENT, user_id BIGINT NOT NULL, car_id BIGINT NOT NULL, quantity INT NOT NULL DEFAULT 1, UNIQUE KEY uq_cart_user_car (user_id, car_id));
 CREATE TABLE enquiries (id BIGINT PRIMARY KEY AUTO_INCREMENT, user_id BIGINT, car_id BIGINT NOT NULL, name VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, phone VARCHAR(30), message VARCHAR(2000), status VARCHAR(30) NOT NULL DEFAULT 'NEW', created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP);
@@ -1280,7 +1280,7 @@ INSERT INTO showrooms (name,address,city,country,latitude,longitude,phone,email)
 ('Car System Zurich','Zurich Global Mobility District','Zurich','Switzerland','47.3769','8.5417','+1 800 555 2026','zurich@carsystem.com'),
 ('Car System Vienna','Vienna Global Mobility District','Vienna','Austria','48.2082','16.3738','+1 800 555 2026','vienna@carsystem.com'),
 ('Car System Stockholm','Stockholm Global Mobility District','Stockholm','Sweden','59.3293','18.0686','+1 800 555 2026','stockholm@carsystem.com'),
-('Car System São Paulo','São Paulo Global Mobility District','São Paulo','Brazil','-23.5505','-46.6333','+1 800 555 2026','sãopaulo@carsystem.com'),
+('Car System São Paulo','São Paulo Global Mobility District','São Paulo','Brazil','-23.5505','-46.6333','+1 800 555 2026','saopaulo@carsystem.com'),
 ('Car System Mexico City','Mexico City Global Mobility District','Mexico City','Mexico','19.4326','-99.1332','+1 800 555 2026','mexicocity@carsystem.com'),
 ('Car System Cape Town','Cape Town Global Mobility District','Cape Town','South Africa','-33.9249','18.4241','+1 800 555 2026','capetown@carsystem.com'),
 ('Car System Johannesburg','Johannesburg Global Mobility District','Johannesburg','South Africa','-26.2041','28.0473','+1 800 555 2026','johannesburg@carsystem.com'),
@@ -1295,4 +1295,7 @@ INSERT INTO showrooms (name,address,city,country,latitude,longitude,phone,email)
 ('Car System Nairobi','Nairobi Global Mobility District','Nairobi','Kenya','-1.2921','36.8219','+1 800 555 2026','nairobi@carsystem.com'),
 ('Car System Istanbul','Istanbul Global Mobility District','Istanbul','Turkey','41.0082','28.9784','+1 800 555 2026','istanbul@carsystem.com'),
 ('Car System Lisbon','Lisbon Global Mobility District','Lisbon','Portugal','38.7223','-9.1393','+1 800 555 2026','lisbon@carsystem.com');
+
+-- Reports / issue tracking
+CREATE TABLE reports (id BIGINT PRIMARY KEY AUTO_INCREMENT, user_id BIGINT NOT NULL, car_id BIGINT NULL, showroom_id BIGINT NULL, issue_type VARCHAR(60) NOT NULL, subject VARCHAR(180) NOT NULL, description VARCHAR(3000) NOT NULL, image_url VARCHAR(1000), status VARCHAR(30) NOT NULL DEFAULT 'OPEN', admin_response VARCHAR(3000), created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP);
 

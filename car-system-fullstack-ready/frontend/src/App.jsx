@@ -1,3 +1,86 @@
-import {BrowserRouter,Routes,Route} from "react-router-dom";import {AuthProvider} from "./context/AuthContext";import Navbar from "./components/Navbar";import Footer from "./components/Footer";import ProtectedRoute from "./components/ProtectedRoute";import Home from "./pages/Home";import Cars from "./pages/Cars";import CarDetails from "./pages/CarDetails";import Login from "./pages/Login";import Signup from "./pages/Signup";import AdminSignup from "./pages/AdminSignup";import Showrooms from "./pages/Showrooms";import Profile from "./pages/Profile";import Wishlist from "./pages/Wishlist";import Cart from "./pages/Cart";import Reports from "./pages/Reports";import MyEnquiries from "./pages/MyEnquiries";import Dashboard from "./admin/Dashboard";import ManageCars from "./admin/ManageCars";import AddCar from "./admin/AddCar";import EditCar from "./admin/EditCar";import ManageUsers from "./admin/ManageUsers";import ManageShowrooms from "./admin/ManageShowrooms";import EditShowroom from "./admin/EditShowroom";import ManageEnquiries from "./admin/ManageEnquiries";import ManageReports from "./admin/ManageReports";
-function Store({children}){return <><Navbar/><main>{children}</main><Footer/></>}
-export default function App(){return <BrowserRouter><AuthProvider><Routes><Route path="/login" element={<Login/>}/><Route path="/signup" element={<Signup/>}/><Route path="/admin/signup" element={<AdminSignup/>}/><Route path="*" element={<Store><Routes><Route path="/" element={<Home/>}/><Route path="/cars" element={<Cars/>}/><Route path="/cars/:id" element={<CarDetails/>}/><Route path="/showrooms" element={<Showrooms/>}/><Route element={<ProtectedRoute/>}><Route path="/profile" element={<Profile/>}/><Route path="/wishlist" element={<Wishlist/>}/><Route path="/cart" element={<Cart/>}/><Route path="/reports" element={<Reports/>}/><Route path="/my-enquiries" element={<MyEnquiries/>}/></Route><Route element={<ProtectedRoute adminOnly/>}><Route path="/admin" element={<Dashboard/>}/><Route path="/admin/cars" element={<ManageCars/>}/><Route path="/admin/cars/add" element={<AddCar/>}/><Route path="/admin/cars/:id/edit" element={<EditCar/>}/><Route path="/admin/users" element={<ManageUsers/>}/><Route path="/admin/showrooms" element={<ManageShowrooms/>}/><Route path="/admin/showrooms/:id/edit" element={<EditShowroom/>}/><Route path="/admin/enquiries" element={<ManageEnquiries/>}/><Route path="/admin/reports" element={<ManageReports/>}/></Route></Routes></Store>}/></Routes></AuthProvider></BrowserRouter>}
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+import ProtectedRoute from "./components/ProtectedRoute";
+import Home from "./pages/Home";
+import Cars from "./pages/Cars";
+import CarDetails from "./pages/CarDetails";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import AdminSignup from "./pages/AdminSignup";
+import Showrooms from "./pages/Showrooms";
+import Profile from "./pages/Profile";
+import Wishlist from "./pages/Wishlist";
+import Cart from "./pages/Cart";
+import Reports from "./pages/Reports";
+import MyEnquiries from "./pages/MyEnquiries";
+import NotFound from "./pages/NotFound";
+import Dashboard from "./admin/Dashboard";
+import ManageCars from "./admin/ManageCars";
+import AddCar from "./admin/AddCar";
+import EditCar from "./admin/EditCar";
+import ManageUsers from "./admin/ManageUsers";
+import ManageShowrooms from "./admin/ManageShowrooms";
+import EditShowroom from "./admin/EditShowroom";
+import ManageEnquiries from "./admin/ManageEnquiries";
+import ManageReports from "./admin/ManageReports";
+
+function Store({ children }) {
+  return (
+    <>
+      <Navbar />
+      <main>{children}</main>
+      <Footer />
+    </>
+  );
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <AuthProvider>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/admin/signup" element={<AdminSignup />} />
+          <Route
+            path="*"
+            element={
+              <Store>
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/cars" element={<Cars />} />
+                  <Route path="/cars/:id" element={<CarDetails />} />
+                  <Route path="/showrooms" element={<Showrooms />} />
+
+                  <Route element={<ProtectedRoute />}>
+                    <Route path="/profile" element={<Profile />} />
+                    <Route path="/wishlist" element={<Wishlist />} />
+                    <Route path="/cart" element={<Cart />} />
+                    <Route path="/reports" element={<Reports />} />
+                    <Route path="/my-enquiries" element={<MyEnquiries />} />
+                  </Route>
+
+                  <Route element={<ProtectedRoute adminOnly />}>
+                    <Route path="/admin" element={<Dashboard />} />
+                    <Route path="/admin/cars" element={<ManageCars />} />
+                    <Route path="/admin/cars/add" element={<AddCar />} />
+                    <Route path="/admin/cars/:id/edit" element={<EditCar />} />
+                    <Route path="/admin/users" element={<ManageUsers />} />
+                    <Route path="/admin/showrooms" element={<ManageShowrooms />} />
+                    <Route path="/admin/showrooms/:id/edit" element={<EditShowroom />} />
+                    <Route path="/admin/enquiries" element={<ManageEnquiries />} />
+                    <Route path="/admin/reports" element={<ManageReports />} />
+                  </Route>
+
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </Store>
+            }
+          />
+        </Routes>
+      </AuthProvider>
+    </BrowserRouter>
+  );
+}

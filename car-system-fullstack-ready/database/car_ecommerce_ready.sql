@@ -1280,7 +1280,7 @@ INSERT INTO showrooms (name,address,city,country,latitude,longitude,phone,email)
 ('Car System Zurich','Zurich Global Mobility District','Zurich','Switzerland','47.3769','8.5417','+1 800 555 2026','zurich@carsystem.com'),
 ('Car System Vienna','Vienna Global Mobility District','Vienna','Austria','48.2082','16.3738','+1 800 555 2026','vienna@carsystem.com'),
 ('Car System Stockholm','Stockholm Global Mobility District','Stockholm','Sweden','59.3293','18.0686','+1 800 555 2026','stockholm@carsystem.com'),
-('Car System São Paulo','São Paulo Global Mobility District','São Paulo','Brazil','-23.5505','-46.6333','+1 800 555 2026','sãopaulo@carsystem.com'),
+('Car System São Paulo','São Paulo Global Mobility District','São Paulo','Brazil','-23.5505','-46.6333','+1 800 555 2026','saopaulo@carsystem.com'),
 ('Car System Mexico City','Mexico City Global Mobility District','Mexico City','Mexico','19.4326','-99.1332','+1 800 555 2026','mexicocity@carsystem.com'),
 ('Car System Cape Town','Cape Town Global Mobility District','Cape Town','South Africa','-33.9249','18.4241','+1 800 555 2026','capetown@carsystem.com'),
 ('Car System Johannesburg','Johannesburg Global Mobility District','Johannesburg','South Africa','-26.2041','28.0473','+1 800 555 2026','johannesburg@carsystem.com'),
@@ -1301,9 +1301,3 @@ INSERT INTO showrooms (name,address,city,country,latitude,longitude,phone,email)
 -- Reports / issue tracking
 CREATE TABLE reports (id BIGINT PRIMARY KEY AUTO_INCREMENT, user_id BIGINT NOT NULL, car_id BIGINT NULL, showroom_id BIGINT NULL, issue_type VARCHAR(60) NOT NULL, subject VARCHAR(180) NOT NULL, description VARCHAR(3000) NOT NULL, image_url VARCHAR(1000), status VARCHAR(30) NOT NULL DEFAULT 'OPEN', admin_response VARCHAR(3000), created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP);
 
-
-SELECT * FROM users;
-SELECT * FROM cars;
-SELECT * FROM showrooms;
-SELECT * FROM enquiries;
-SELECT * FROM reports;

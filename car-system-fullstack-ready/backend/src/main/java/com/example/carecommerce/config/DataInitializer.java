@@ -1237,7 +1237,7 @@ public class DataInitializer {
     }
 
     private void seedShowrooms(ShowroomRepository showrooms) {
-        if(showrooms.count() >= 60) return;
+        if(showrooms.count() >= 67) return;
         saveShowroomIfNeeded(showrooms,"Car System Chennai","Chennai Global Mobility District","Chennai","India",13.0827,80.2707,"+1 800 555 2026","chennai@carsystem.com");
         saveShowroomIfNeeded(showrooms,"Car System Mumbai","Mumbai Global Mobility District","Mumbai","India",19.076,72.8777,"+1 800 555 2026","mumbai@carsystem.com");
         saveShowroomIfNeeded(showrooms,"Car System Bengaluru","Bengaluru Global Mobility District","Bengaluru","India",12.9716,77.5946,"+1 800 555 2026","bengaluru@carsystem.com");
@@ -1290,7 +1290,7 @@ public class DataInitializer {
         saveShowroomIfNeeded(showrooms,"Car System Zurich","Zurich Global Mobility District","Zurich","Switzerland",47.3769,8.5417,"+1 800 555 2026","zurich@carsystem.com");
         saveShowroomIfNeeded(showrooms,"Car System Vienna","Vienna Global Mobility District","Vienna","Austria",48.2082,16.3738,"+1 800 555 2026","vienna@carsystem.com");
         saveShowroomIfNeeded(showrooms,"Car System Stockholm","Stockholm Global Mobility District","Stockholm","Sweden",59.3293,18.0686,"+1 800 555 2026","stockholm@carsystem.com");
-        saveShowroomIfNeeded(showrooms,"Car System São Paulo","São Paulo Global Mobility District","São Paulo","Brazil",-23.5505,-46.6333,"+1 800 555 2026","sãopaulo@carsystem.com");
+        saveShowroomIfNeeded(showrooms,"Car System São Paulo","São Paulo Global Mobility District","São Paulo","Brazil",-23.5505,-46.6333,"+1 800 555 2026","saopaulo@carsystem.com");
         saveShowroomIfNeeded(showrooms,"Car System Mexico City","Mexico City Global Mobility District","Mexico City","Mexico",19.4326,-99.1332,"+1 800 555 2026","mexicocity@carsystem.com");
         saveShowroomIfNeeded(showrooms,"Car System Cape Town","Cape Town Global Mobility District","Cape Town","South Africa",-33.9249,18.4241,"+1 800 555 2026","capetown@carsystem.com");
         saveShowroomIfNeeded(showrooms,"Car System Johannesburg","Johannesburg Global Mobility District","Johannesburg","South Africa",-26.2041,28.0473,"+1 800 555 2026","johannesburg@carsystem.com");
@@ -1307,5 +1307,5 @@ public class DataInitializer {
         saveShowroomIfNeeded(showrooms,"Car System Lisbon","Lisbon Global Mobility District","Lisbon","Portugal",38.7223,-9.1393,"+1 800 555 2026","lisbon@carsystem.com");
     }
 
-    private void saveShowroomIfNeeded(ShowroomRepository r,String name,String address,String city,String country,double lat,double lon,String phone,String email){ if(r.count()<60){ Showroom s=new Showroom(); s.setName(name); s.setAddress(address); s.setCity(city); s.setCountry(country); s.setLatitude(lat); s.setLongitude(lon); s.setPhone(phone); s.setEmail(email); r.save(s);} }
+    private void saveShowroomIfNeeded(ShowroomRepository r,String name,String address,String city,String country,double lat,double lon,String phone,String email){ if(r.count()<67){ Showroom s=new Showroom(); s.setName(name); s.setAddress(address); s.setCity(city); s.setCountry(country); s.setLatitude(lat); s.setLongitude(lon); s.setPhone(phone); s.setEmail(email); r.save(s);} }
 }

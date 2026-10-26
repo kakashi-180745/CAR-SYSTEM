@@ -1,49 +1,77 @@
-# Car System — Ready-to-Run Full Stack
+# Car System — Full-Stack Automotive Marketplace
 
-React + Vite frontend, Spring Boot + JWT backend, and MySQL database.
+Modern full-stack automotive inventory, showroom discovery, shortlist/cart, enquiry concierge, and admin management platform.
 
-## 1. MySQL
-1. Open MySQL Workbench / MySQL CLI.
-2. Run `database/car_ecommerce_ready.sql` as a full reset/seed. It creates `car_ecommerce`, seeds the catalog and showrooms, and creates the new reports/profile schema.
-3. Create a dedicated MySQL application user (do not use `root`) and set the backend environment variables shown in `.env.example`. Do not put credentials into source code.
+## Architecture
+- **Frontend (`frontend/`)**: React 19 + Vite 7 + React Router 7 + Leaflet Maps + Axios
+- **Primary Backend (`backend/`)**: Java 17 + Spring Boot 3.5.5 + Spring Security (JWT + BCrypt + Rate Limiter) + Spring Data JPA (MySQL or Embedded H2)
+- **Portable Zero-Setup Backend (`backend-lite/`)**: Node.js 22 (`node:sqlite`) + Express 100% API-compatible server (auto-seeds from `database/car_ecommerce_ready.sql` with zero MySQL/JDK setup)
+- **Database (`database/`)**: MySQL 8 schema & seed scripts (`1,200` vehicles across global markets + `67` global showroom locations)
 
-For an existing database, use `database/upgrade_existing.sql` instead of the full reset script.
+---
 
-## 2. Backend
+## Option A — Run with Spring Boot + MySQL (or Embedded H2)
+
+### 1. MySQL Database
+1. Open MySQL Workbench or MySQL CLI.
+2. Run `database/car_ecommerce_ready.sql` to create `car_ecommerce` and seed all 1,200 cars and 67 showrooms (or `database/upgrade_existing.sql` for an existing database).
+3. Configure environment variables (see `.env.example`), or use local defaults (`DB_USERNAME=root`, `DB_PASSWORD=root`).
+
+### 2. Start Spring Boot Backend
 Requirements: JDK 17+ and Maven 3.9+.
 
-```text
+```bash
 cd backend
+# With MySQL:
 mvn clean spring-boot:run
+
+# Or without MySQL (Embedded H2 file database — auto-seeds 1,200 cars & 67 showrooms):
+mvn clean spring-boot:run -Dspring-boot.run.profiles=h2
 ```
-Backend: `http://localhost:8080`
+Backend runs on `http://localhost:8080`.
 
-Admin access is intentionally not hardcoded. For the initial administrator, set `BOOTSTRAP_ADMIN_EMAIL` and `BOOTSTRAP_ADMIN_PASSWORD`. If the existing admin-registration screen is required, set `ADMIN_SIGNUP_CODE` to a strong rotated value.
-
-## 3. Frontend
+### 3. Start Frontend
 Requirements: Node.js 18+.
 
-```text
+```bash
 cd frontend
 npm install
 npm run dev
 ```
-Frontend: `http://localhost:5173`
+Frontend runs on `http://localhost:5173` (automatically proxies `/api` and `/uploads` to `http://localhost:8080`).
 
-## Included workflow
-- Admin login + protected admin registration
-- Admin car add/edit/delete + availability and price management
-- Admin showroom add/edit/delete + location/contact management
-- User signup requires phone number
-- User profile edit + profile image URL + password change
-- Car search with explicit not-available state
-- Enquiry flow: user -> database -> admin dashboard -> status -> user
-- Report/issue flow: user -> database -> admin dashboard -> response/status -> user
-- Wishlist + cart
-- 1,200 seeded cars and global showroom data
+---
 
-All dynamic data is API/database driven; do not hardcode inventory in React.
+## Option B — Zero-Setup Portable Mode (Node.js 22+ & SQLite)
 
-## Security
+No Java, Maven, or MySQL installation required:
 
-See `SECURITY.md` for the security hardening and required environment configuration. The application now validates uploaded profile images, rate-limits authentication attempts, adds security headers, and removes credentials from source/config defaults.
+```bash
+# Terminal 1 — API Server (auto-seeds 1,200 cars & 67 showrooms from SQL)
+cd backend-lite
+npm install
+npm start
+
+# Terminal 2 — React Frontend
+cd frontend
+npm install
+npm run dev
+```
+
+Or on Windows, double-click `START_PORTABLE_WINDOWS.bat`.
+
+---
+
+## Included Features
+- **Global Catalog (`1,200` vehicles)**: Multi-criteria search & filtering (brand, body type, fuel, transmission, market country, max price, availability), sorting, 48-card progressive loading, and side-by-side **3-car comparison modal**.
+- **Vehicle Detail Experience**: Full trim & market reference pricing, interactive **EMI / Finance Estimator**, customizable **Showroom Enquiry Modal**, wishlist sync, and similar vehicles.
+- **Interactive Global Showroom Network (`67` cities)**: Leaflet map with city/country filtering, auto-fitting map bounds, and direct map links.
+- **Shortlist Cart & Wishlist**: Live navbar badge counters, quantity steppers, and 1-click multi-car shortlist enquiry submission.
+- **User Account & Security**: Profile editor, file avatar upload (JPG/PNG/GIF/BMP) **or** external image URL, BCrypt password update, JWT stateless auth, and rate-limited auth endpoints.
+- **Support & Issue Tracking**: User issue/car-request submission with showroom & vehicle linking, tracked through to admin resolution.
+- **Admin Console (`/admin`)**: Unified sub-navigation, live metrics, searchable/paginated car management with 1-click availability toggle, showroom network CRUD, customer enquiry pipeline (`NEW` -> `CONTACTED` -> `TEST_DRIVE_SCHEDULED` -> `CLOSED`), support report responses, and user management.
+
+## Default Development Accounts (Portable Mode / Windows Starter)
+- **Admin**: `admin@carsystem.com` / `Admin@1234`
+- **Customer**: `demo@carsystem.com` / `User@1234`
+- **Admin Registration Code**: `CAR-ADMIN-2026` (override or clear `ADMIN_SIGNUP_CODE` in production)

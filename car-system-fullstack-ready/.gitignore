@@ -1,8 +1,17 @@
-# Java
+# Java / Spring Boot
 backend/target/
+backend/data/
 *.class
 
-# Node
+# Uploads (keep directory placeholder)
+backend/uploads/profiles/*
+!backend/uploads/profiles/.gitkeep
+
+# Portable Node SQLite backend
+backend-lite/node_modules/
+backend-lite/data/
+
+# Frontend Node / Vite
 frontend/node_modules/
 frontend/dist/
 
@@ -11,6 +20,8 @@ frontend/dist/
 .idea/
 *.iml
 
-# Environment
+# Environment (keep .env.example files)
 .env
 .env.*
+!.env.example
+!frontend/.env.example

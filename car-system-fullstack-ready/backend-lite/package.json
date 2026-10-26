@@ -1,0 +1,18 @@
+{
+  "name": "car-system-backend-lite",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Zero-MySQL/Zero-JDK portable SQLite + Express API server (100% API-compatible with Spring Boot backend)",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node --no-warnings server.js",
+    "dev": "node --no-warnings server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^2.5.0"
+  }
+}

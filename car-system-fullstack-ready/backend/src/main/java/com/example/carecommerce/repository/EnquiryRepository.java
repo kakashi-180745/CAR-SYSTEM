@@ -1,7 +1,12 @@
 package com.example.carecommerce.repository;
+
 import com.example.carecommerce.model.Enquiry;
 import org.springframework.data.jpa.repository.JpaRepository;
+
 import java.util.List;
-public interface EnquiryRepository extends JpaRepository<Enquiry,Long> {
+
+public interface EnquiryRepository extends JpaRepository<Enquiry, Long> {
     List<Enquiry> findByUserId(Long userId);
+    List<Enquiry> findByUserIdOrderByCreatedAtDesc(Long userId);
+    List<Enquiry> findAllByOrderByCreatedAtDesc();
 }

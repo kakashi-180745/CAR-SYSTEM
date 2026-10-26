@@ -1,6 +1,6 @@
 package com.example.carecommerce.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -10,13 +10,14 @@ public class User {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private Long id;
     @Column(nullable = false, length = 100) private String name;
     @Column(nullable = false, unique = true, length = 160) private String email;
-    @JsonIgnore @Column(nullable = false) private String password;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @Column(nullable = false) private String password;
     @Column(nullable = false, length = 20) private String role = "USER";
     @Column(length = 20) private String phone;
     @Column(name = "profile_image", length = 1000) private String profileImage;
     @Column(nullable = false) private LocalDateTime createdAt;
 
-    @PrePersist public void prePersist(){ if(createdAt==null) createdAt=LocalDateTime.now(); }
+    @PrePersist public void prePersist(){ if(createdAt==null) createdAt=LocalDateTime.now(); if(role==null) role="USER"; }
     public User(){}
     public User(String name,String email,String password,String role){this.name=name;this.email=email;this.password=password;this.role=role;}
     public Long getId(){return id;} public String getName(){return name;} public String getEmail(){return email;} public String getPassword(){return password;} public String getRole(){return role;} public String getPhone(){return phone;} public String getProfileImage(){return profileImage;} public LocalDateTime getCreatedAt(){return createdAt;}
