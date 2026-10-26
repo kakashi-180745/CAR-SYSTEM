@@ -1,6 +1,6 @@
 {
   "framework": "vite",
-  "installCommand": "node scripts/sync-frontend.mjs && npm install",
+  "installCommand": "npm install",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "functions": {
